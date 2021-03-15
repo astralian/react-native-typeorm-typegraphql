@@ -1,0 +1,16 @@
+mutation UpdatePlace(
+    $id: Float!
+    $title: String!
+    $description: String!
+    $imageUrl: String!
+) {
+    createPlace(
+        place: { id: $id, title: $title, description: $description, imageUrl: $imageUrl }
+    ) {
+        id
+        title
+        description
+        imageUrl
+        creationDate
+    }
+}

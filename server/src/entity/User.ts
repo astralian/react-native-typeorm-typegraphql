@@ -1,18 +1,28 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from 'typeorm';
+import { Field, ObjectType } from 'type-graphql';
+import { Place } from './Place';
 
+@ObjectType()
 @Entity()
-export class User {
-
+export class User extends BaseEntity {
+    @Field()
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    firstName: string;
+    @Field()
+    @Column('text', { unique: true })
+    email: string;
+
+    @Field()
+    @Column('text', { unique: true })
+    username: string;
 
     @Column()
-    lastName: string;
+    password: string;
 
-    @Column()
-    age: number;
-
+    @Field(() => [Place])
+    @OneToMany(() => Place, (places) => places.user, {
+        eager: true
+    })
+    places: Place[];
 }

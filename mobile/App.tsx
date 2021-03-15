@@ -1,57 +1,34 @@
-import React from 'react';
-import { StyleSheet, Text, ScrollView } from 'react-native';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { CardView } from './src/components';
+import React, { useState } from 'react';
+import { DarkTheme as PaperDarkTheme, DefaultTheme as PaperDefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { apolloClient } from './graphql';
+import { AppNavigator } from './src/navigation';
 
-const theme = {
-  ...DefaultTheme,
-  roundness: 2,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#3498db',
-    accent: '#f1c40f'
-  }
+const CombinedDefaultTheme = {
+    ...PaperDefaultTheme,
+    ...NavigationDefaultTheme
 };
 
-const trip1 = {
-  title: 'Sundown Town',
-  description: 'Awaiting daybreak',
-  imageUrl: 'https://i.picsum.photos/id/695/700/700.jpg'
-};
-
-const trip2 = {
-  title: 'The Stars',
-  description: 'Astro vigil',
-  imageUrl: 'https://i.picsum.photos/id/683/701/701.jpg'
-};
-
-const trip3 = {
-  title: 'Coastal Cruise',
-  description: 'Serene scene',
-  imageUrl: 'https://i.picsum.photos/id/51/701/701.jpg'
+const CombinedDarkTheme = {
+    ...PaperDarkTheme,
+    ...NavigationDarkTheme,
+    colors: { ...PaperDarkTheme.colors, ...NavigationDarkTheme.colors }
 };
 
 export default function App() {
-  return (
-      <PaperProvider theme={theme}>
-        <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-        >
-          <CardView {...trip1} />
-          <CardView {...trip2} />
-          <CardView {...trip3} />
-        </ScrollView>
-      </PaperProvider>
-  );
-}
+    const [isDarkTheme, setIsDarkTheme] = useState(false);
+    const theme = isDarkTheme ? CombinedDarkTheme : CombinedDefaultTheme;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff'
-  },
-  contentContainer: {
-    paddingVertical: 40
-  }
-});
+    function toggleTheme() {
+        setIsDarkTheme((isDark) => !isDark);
+    }
+
+    return (
+        <ApolloProvider client={apolloClient}>
+            <PaperProvider theme={theme as any}>
+                <AppNavigator toggleTheme={toggleTheme} />
+            </PaperProvider>
+        </ApolloProvider>
+    );
+}

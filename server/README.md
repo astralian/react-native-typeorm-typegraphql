@@ -1,7 +1,8 @@
-# Awesome Project Build with TypeORM
+Just for learning purposes.
 
-Steps to run this project:
+- `Typescipt`
+- `TypeORM`
+- `TypeGraphQL`
+- `GraphQL Codegen`
+- `React Native`
 
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Run `npm start` command
